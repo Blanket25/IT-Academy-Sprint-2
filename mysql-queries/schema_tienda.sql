@@ -176,12 +176,7 @@ SELECT
 FROM
   producto
 ORDER BY
-  nombre DESC;
-SELECT
-  nombre
-FROM
-  producto
-ORDER BY
+  nombre,
   precio DESC;
 -- Retorna una llista amb les 5 primeres files de la taula fabricante.
 SELECT
@@ -356,21 +351,10 @@ FROM
 WHERE
   p.precio >= 180
 ORDER BY
-  p.precio DESC;
-SELECT
-  p.nombre AS nombre_producto,
-  p.precio,
-  f.nombre AS nombre_fabricante
-FROM
-  producto p
-  INNER JOIN fabricante f ON p.codigo_fabricante = f.codigo
-WHERE
-  p.precio >= 180
-ORDER BY
+  p.precio DESC,
   nombre_producto;
 -- Retorna un llistat amb el codi i el nom de fabricant, solament d 'aquells fabricants
   -- que tenen productes associats en la base de dades.
-  -- *!A que se refiere con asociados?? que no estan en la tabla de productos?
 SELECT
   f.nombre AS nombre_fabricante,
   p.nombre AS nombre_producto

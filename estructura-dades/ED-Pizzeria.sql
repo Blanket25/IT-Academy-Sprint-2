@@ -389,4 +389,22 @@ INSERT INTO
 VALUES
   (1, '2021-10-25 17:49:59', 3);
 -- Llista quants productes de la categoria 'begudes' s'han venut en una determinada localitat
-  -- Llista quantes comandes ha efectuat un determinat empleat
+SELECT
+  d.drink_name
+FROM
+  drink d
+  INNER JOIN orders o ON o.drink_id = d.id
+  INNER JOIN shops s ON s.id = o.shop_id
+  INNER JOIN localitats l ON l.id = s.localitat_id
+WHERE
+  l.localitat_name = 'localitat1';
+-- Llista quantes comandes ha efectuat un determinat empleat
+SELECT
+  o.*
+FROM
+  orders o
+  INNER JOIN shops s ON s.id = o.shop_id
+  INNER JOIN deliveries d ON d.order_id = o.id
+  INNER JOIN employees e ON e.id = d.rider_id
+WHERE
+  e.employee_name = 'robert';
