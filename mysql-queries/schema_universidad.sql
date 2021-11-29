@@ -259,9 +259,7 @@ INSERT INTO alumno_se_matricula_asignatura VALUES (19, 9, 5);
 INSERT INTO alumno_se_matricula_asignatura VALUES (19, 10, 5);
 SELECT p.apellido1, p.apellido2, p.nombre FROM persona p INNER JOIN alumno_se_matricula_asignatura a ON p.id = a.id_alumno ORDER BY p.apellido1, p.apellido2, p.nombre;
 SELECT p.nombre, p.apellido1, apellido2 FROM persona p INNER JOIN alumno_se_matricula_asignatura a ON p.id = a.id_alumno WHERE p.telefono IS NULL;
--- Retorna el llistat dels alumnes que van néixer en 1999.
-SELECT p.nombre, p.apellido1, apellido2 FROM persona p INNER JOIN alumno_se_matricula_asignatura a ON p.id = a.id_alumno WHERE p.fecha_nacimiento > '1999/01/01' AND p.fecha_nacimiento < '1999/12/31';
---!no funciona
+SELECT p.nombre, p.apellido1, p.apellido2 FROM persona p WHERE p.tipo = 'alumno' AND p.fecha_nacimiento >= '1999/01/01' AND p.fecha_nacimiento <= '1999/12/31';
 SELECT p.nombre, p.apellido1, p.apellido2 FROM persona p INNER JOIN profesor pr ON p.id = pr.id_profesor WHERE p.telefono IS NULL AND p.nif LIKE '%K';
 SELECT * FROM asignatura WHERE cuatrimestre = 1 AND curso = 3 AND id_grado = 7;
 SELECT pe.apellido1, pe.apellido2, pe.nombre AS nombre_profesor, d.nombre AS nombre_departamento FROM profesor pr INNER JOIN persona pe ON pe.id = id_profesor INNER JOIN departamento d ON d.id = pr.id_departamento ORDER BY pe.apellido1, pe.apellido2, pe.nombre;
@@ -275,35 +273,13 @@ SELECT pe.apellido1, pe.apellido2, pe.nombre As nombre_profesor FROM profesor pr
 SELECT a.* FROM asignatura a LEFT JOIN profesor p ON p.id_profesor = a.id_profesor WHERE a.id_profesor IS NULL;
 SELECT d.* FROM departamento d INNER JOIN profesor pr ON pr.id_departamento = d.id LEFT JOIN asignatura a ON a.id_profesor = pr.id_profesor WHERE a.curso IS NULL;
 SELECT COUNT(*) FROM alumno_se_matricula_asignatura;
--- Calcula quants alumnes van néixer en 1999.
-SELECT COUNT(*) FROM alumno_se_matricula_asignatura al
-INNER JOIN persona p ON p.id = al.id_alumno
-WHERE p.fecha_nacimiento > '1999/01/01' AND p.fecha_nacimiento <'1999/12/31';
---!no me funciona trabahar con fechaaaaas
--- Calcula quants professors hi ha en cada departament. El resultat només ha de mostrar dues 
--- columnes, una amb el nom del departament i una altra amb el nombre de professors que hi ha 
--- en aquest departament. El resultat només ha d' incloure els departaments que tenen professors 
--- associats i haur à d 'estar ordenat de major a menor pel nombre de professors.
---!no fucniona
-SELECT d.nombre, pe.nombre COUNT(*) FROM profesor pr
-INNER JOIN persona pe ON pe.id = pr.id_profesor
-INNER JOIN departamento d ON d.id = pr.id_departamento
-ORDER BY pe.nombre;
--- Retorna un llistat amb tots els departaments i el nombre de professors que hi ha en cadascun 
--- d' ells.Tingui en compte que poden existir departaments que no tenen professors associats.
--- Aquests departaments tamb é han d 'aparèixer en el llistat.
---!tienen q aparecer los q no tienen profes asociados
-SELECT d.nombre, COUNT(pe.nombre) FROM departamento d 
-LEFT JOIN profesor p ON p.id_departamento = d.id
-INNER JOIN persona pe ON pe.id = p.id_departamento
-GROUP BY d.nombre;
+SELECT COUNT(*) FROM persona p WHERE p.tipo = 'alumno' AND p.fecha_nacimiento >= '1999/01/01' AND p.fecha_nacimiento <= '1999/12/31';
+SELECT d.nombre, COUNT(pe.nombre) FROM profesor pr INNER JOIN persona pe ON pe.id = pr.id_profesor INNER JOIN departamento d ON d.id = pr.id_departamento GROUP BY d.nombre;
+SELECT d.nombre, COUNT(pe.nombre) FROM persona pe INNER JOIN profesor pr ON pr.id_profesor = pe.id RIGHT JOIN departamento d ON pr.id_departamento = d.id GROUP BY d.nombre;
 SELECT g.nombre, COUNT(a.nombre) FROM grado g LEFT JOIN asignatura a ON a.id_grado = g.id GROUP BY g.nombre ORDER BY COUNT(a.nombre);
 SELECT g.nombre, COUNT(a.nombre) FROM grado g LEFT JOIN asignatura a ON a.id_grado = g.id GROUP BY g.nombre HAVING COUNT(a.nombre) > 40;
 SELECT g.nombre, a.tipo, SUM(a.creditos) FROM grado g INNER JOIN asignatura a ON a.id_grado = g.id GROUP BY g.nombre, a.tipo;
 SELECT ce.anyo_inicio, COUNT(al.id_alumno) FROM alumno_se_matricula_asignatura al INNER JOIN curso_escolar ce ON ce.id = al.id_curso_escolar GROUP BY ce.anyo_inicio;
 SELECT pr.id_profesor, pe.nombre, pe.apellido1, pe.apellido2, COUNT(a.nombre) FROM persona pe INNER JOIN profesor pr ON pr.id_profesor = pe.id LEFT JOIN asignatura a ON a.id_profesor = pr.id_profesor GROUP BY pr.id_profesor ORDER BY COUNT(a.nombre) DESC;
--- Retorna totes les dades de l' alumne m é s jove.
---!como hago para q aparezcan todos los datos???
-SELECT MAX(p.fecha_nacimiento) FROM persona p
-INNER JOIN alumno_se_matricula_asignatura a ON a.id_alumno = p.id ;
+SELECT pe.* FROM persona pe INNER JOIN alumno_se_matricula_asignatura al ON pe.id = al.id_alumno ORDER BY pe.fecha_nacimiento DESC LIMIT 1;
 SELECT pe.nombre FROM profesor pr INNER JOIN persona pe ON pe.id = pr.id_profesor INNER JOIN departamento d ON d.id = pr.id_departamento LEFT JOIN asignatura a ON a.id_profesor = pr.id_profesor WHERE a.id_profesor IS NULL;

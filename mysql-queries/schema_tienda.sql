@@ -43,37 +43,15 @@ INSERT INTO producto VALUES(11, 'Impresora HP Laserjet Pro M26nw', 180, 3);
 SELECT nombre FROM producto;
 SELECT nombre, precio FROM producto;
 SELECT * FROM producto;
--- Llista el nom dels productos, el preu en euros i el preu en d ò lars
-  -- estatunidencs (USD).
-SELECT
-  nombre,
-  precio,
-  precio * 0.88
-FROM
-  producto;
--- Llista el nom dels productos, el preu en euros i el preu
-  -- en dòlars estatunidencs (USD).Utilitza els següents à
-  -- lies per a les columnes: nom de producto, euros,dolars.
-SELECT
-  nombre AS nom_de_producto,
-  precio AS euros,
-  precio * 0.88 AS DOLARS
-FROM
-  producto;
+SELECT nombre, precio, precio * 1.088 FROM producto;
+SELECT nombre AS nom_de_producto, precio AS euros, precio * 1.088 AS dolars FROM producto;
 SELECT UPPER(nombre), precio FROM producto;
 SELECT LOWER(nombre), precio FROM producto;
 SELECT nombre, LEFT(UPPER(nombre), 2) FROM fabricante;
 SELECT nombre, ROUND(precio) FROM producto;
 SELECT nombre, TRUNCATE(precio, 0) FROM producto;
 SELECT f.codigo FROM fabricante f INNER JOIN producto p ON f.codigo = p.codigo_fabricante;
--- Llista el codi dels fabricants que tenen productos en la taula producto,
-  -- eliminant els codis que apareixen repetits.
-  -- *!buscar otra forma de hacerlo
-SELECT
-  DISTINCT f.codigo
-FROM
-  fabricante f
-  INNER JOIN producto p ON f.codigo = p.codigo_fabricante;
+SELECT DISTINCT f.codigo FROM fabricante f INNER JOIN producto p ON f.codigo = p.codigo_fabricante;
 SELECT nombre FROM fabricante ORDER BY nombre;
 SELECT nombre FROM fabricante ORDER BY nombre DESC;
 SELECT nombre FROM producto ORDER BY nombre, precio DESC;
@@ -96,35 +74,9 @@ SELECT p.nombre, p.precio FROM producto p INNER JOIN fabricante f ON p.codigo_fa
 SELECT p.nombre AS nombre_producto, p.precio, f.nombre AS nombre_fabricante FROM producto p INNER JOIN fabricante f ON p.codigo_fabricante = f.codigo WHERE p.precio >= 180 ORDER BY p.precio DESC, nombre_producto;
 SELECT f.nombre AS nombre_fabricante, p.nombre AS nombre_producto FROM fabricante f INNER JOIN producto p ON f.codigo = p.codigo_fabricante;
 SELECT f.nombre AS nombre_fabricante, p.nombre AS nombre_producto FROM fabricante f, producto p;
--- Retorna un llistat on nom és apareguin aquells fabricants que no tenen cap producte
-  -- associat.
-  --*!no funcionaa
-SELECT f.nombre AS nombre_fabricante, p.nombre AS nombre_producto
-FROM fabricante f, producto p
-WHERE
-  NOT EXISTS(
-    SELECT
-      *
-    FROM
-      producto p
-    WHERE
-      p.codigo = f.codigo_fabricante
-  );
+SELECT f.nombre AS nombre_fabricante, p.nombre AS nombre_producto FROM fabricante f LEFT JOIN producto p ON p.codigo_fabricante = f.codigo WHERE p.codigo_fabricante IS NULL;
 SELECT p.nombre FROM producto p, fabricante f WHERE f.nombre = 'Lenovo';
--- Retorna totes les dades dels productes que tenen el mateix preu que el producte més
-  -- car del fabricador Lenovo.(Sense utilitzar INNER JOIN).
-  --*!no entiendo q hay q hacer
-SELECT
-  *
-FROM
-  producto p,
-  fabricante f
-WHERE
-  f.nombre = 'Lenovo'
-ORDER BY
-  p.precio DESC
-LIMIT
-  1;
+SELECT * FROM producto p WHERE p.precio = (SELECT MAX(p.precio) FROM producto p WHERE p.codigo_fabricante = (SELECT f.codigo FROM fabricante f WHERE f.nombre = 'Lenovo'));
 SELECT p.nombre FROM producto p INNER JOIN fabricante f ON p.codigo_fabricante = f.codigo WHERE f.nombre = 'Lenovo' ORDER BY p.precio DESC LIMIT 1;
 SELECT p.nombre FROM producto p INNER JOIN fabricante f ON p.codigo_fabricante = f.codigo WHERE f.nombre = 'Hewlett-Packard' ORDER BY p.precio LIMIT 1;
 SELECT * FROM producto p INNER JOIN fabricante f ON p.codigo_fabricante = f.codigo WHERE f.nombre = 'Asus';
