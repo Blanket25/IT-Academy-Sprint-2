@@ -19,8 +19,8 @@ db.restaurant.find({$or: [{borough:'Staten Island'}, {borough: 'Queens'}, {borou
 // Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a 
 // aquells restaurants que no pertanyen a Staten Island o Queens o Bronx o Brooklyn
 db.restaurant.find({$or:[{borough: {$ne: 'Staten Island'}}, {borough: {$ne: 'Queens'}}, {borough: {$ne: 'Bronx'}}, {borough: {$ne: 'Brooklyn'}}]}, {restaurant_id:1, name:1, borough:1, cuisine:1})
-// // Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a 
-// // aquells restaurants que aconsegueixin un marcador quin no és més que 10
+// Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a 
+// aquells restaurants que aconsegueixin un marcador quin no és més que 10
 
 // // Escriu una consulta per trobar el restaurant_id, name, borough i cuisine per a 
 // // aquells restaurants que preparen marisc ('seafood') excepte 'American' i 'Chinese' 
