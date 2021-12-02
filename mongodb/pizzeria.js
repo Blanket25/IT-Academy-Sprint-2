@@ -1,5 +1,3 @@
-use('pizzeria');
-
 //Orders
 db.orders.insertMany([
   {

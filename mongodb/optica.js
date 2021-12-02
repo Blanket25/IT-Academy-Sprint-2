@@ -1,5 +1,3 @@
-use('optica');
-
 //Suppliers
 db.supplier.insertMany([{
   name: 'supp1',
